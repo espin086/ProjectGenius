@@ -10,7 +10,26 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def inputs_overview():
+def inputs_test():
+    background = input("Q: background?: ")
+    opportunity = input("Q: describe opportunity?: ")
+    solution = input("Q: describe solution?: ")
+    value_statement = input("Q: value statement?: ")
+    primary_hypothesis = input("Q: primary hypothesis?: ")
+    secondary_hypothesis = input("Q: secondary hypothesis?: ")
+    kpis = input("Q: kpis?: ")
+    return (
+        background,
+        opportunity,
+        solution,
+        value_statement,
+        primary_hypothesis,
+        secondary_hypothesis,
+        kpis,
+    )
+
+
+def inputs_master():
     goals = input("Q1 of 8: Specific Goals?: ")
     kpis = input("Q2 of 8:Measurable?: ")
     achieveable = input("Q3 of 8:Achievable?: ")
@@ -22,55 +41,73 @@ def inputs_overview():
     return goals, kpis, achieveable, relevance, time_bound, schedule, resources, budget
 
 
+def main_master():
+    logger.info(" Creating a project plan for: %s", args.master)
+    logger.info("************** STEP 1: Collect Input **************")
+    goals, kpis, achieveable, relevance, time_bound, schedule, resources, budget = (
+        inputs_master()
+    )
+    prompt_overview = prompts.prompt_overview(
+        args.master, goals, kpis, achieveable, relevance, time_bound
+    )
+    text_overview = gpt.text_generation(prompt_overview)
+
+    prompt_plan = prompts.prompt_plan(text_overview, schedule, resources, budget)
+    text_plan = gpt.text_generation(prompt_plan)
+
+    prompt_tickets = prompts.prompt_tickets(text_overview + text_plan)
+    text_tickets = gpt.text_generation(prompt_tickets)
+
+    text_all = text_overview + text_plan + text_tickets
+
+    prompt_text_all = prompts.prompt_writing_critic(text_all)
+    text_all = gpt.text_generation(prompt_text_all)
+
+    prompt_deliverables = prompts.prompt_deliverables(text_all)
+    text_deliverables = gpt.text_generation(prompt_deliverables)
+
+    prompt_learning_resources = prompts.prompt_learning_resources(text_all)
+    text_learnings_resources = gpt.text_generation(prompt_learning_resources)
+
+    text_all = text_all + text_deliverables + text_learnings_resources
+
+    prompt_final = prompts.prompt_writing_critic(text_all)
+    text_final = gpt.text_generation(prompt_final)
+
+    logger.info("Completed Project Plan: %s", args.master)
+    return text_all
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generative AI Project Planning Tool")
-    parser.add_argument("--create", help="Create a new project plan")
-    parser.add_argument("--view", help="View existing project plans")
-    parser.add_argument("--update", help="Update a project plan")
-    parser.add_argument("--delete", help="Delete a project plan")
+    parser.add_argument("--master", help="Create a master project plan")
+    parser.add_argument("--test", help="Create a plan for experimentation")
+    parser.add_argument("--ds", help="create a plan for data science project")
+    parser.add_argument("--de", help="create a plan for data engineering project")
 
     args = parser.parse_args()
 
-    if args.create:
-        logger.info(" Creating a project plan for: %s", args.create)
-        logger.info("************** STEP 1: Collect Input **************")
-        goals, kpis, achieveable, relevance, time_bound, schedule, resources, budget = (
-            inputs_overview()
-        )
-        prompt_overview = prompts.prompt_overview(
-            args.create, goals, kpis, achieveable, relevance, time_bound
-        )
-        text_overview = gpt.text_generation(prompt_overview)
+    if args.master:
+        master_plan = main_master()
+        logger.info("********** Completed Project Plan: %s **********", args.master)
+        print(master_plan)
 
-        prompt_plan = prompts.prompt_plan(text_overview, schedule, resources, budget)
-        text_plan = gpt.text_generation(prompt_plan)
-
-        prompt_tickets = prompts.prompt_tickets(text_overview + text_plan)
-        text_tickets = gpt.text_generation(prompt_tickets)
-
-        text_all = text_overview + text_plan + text_tickets
-
-        prompt_text_all = prompts.prompt_writing_critic(text_all)
-        text_all = gpt.text_generation(prompt_text_all)
-
-        prompt_deliverables = prompts.prompt_deliverables(text_all)
-        text_deliverables = gpt.text_generation(prompt_deliverables)
-
-        prompt_learning_resources = prompts.prompt_learning_resources(text_all)
-        text_learnings_resources = gpt.text_generation(prompt_learning_resources)
-
-        text_all = text_all + text_deliverables + text_learnings_resources
-
-        prompt_final = prompts.prompt_writing_critic(text_all)
-        text_final = gpt.text_generation(prompt_final)
-
-        logger.info(text_final)
-
-    elif args.view:
-        print("Viewing existing project plans...")
-    elif args.update:
+    elif args.test:
+        initiative_name = args.test
+        logger.info("Creating a project plan for: %s", initiative_name)
+        (
+            background,
+            opportunity,
+            solution,
+            value_statement,
+            primary_hypothesis,
+            secondary_hypothesis,
+            kpis,
+        ) = inputs_test()
+        logging.info("SUCCESSFULL INPUT: %s", initiative_name)
+    elif args.ds:
         print("Updating a project plan...")
-    elif args.delete:
+    elif args.de:
         print("Deleting a project plan...")
     else:
         print(

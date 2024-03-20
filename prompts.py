@@ -11,7 +11,7 @@ def prompt_learning_resources(plan):
     
     Role: you are a technical executor working with a project manager. 
 
-    Task: You will create a list of learning resources for the project plan. Include links to websites, youtube channels, wikipedia pages, and books that will help the team learn the skills they need to complete the project.
+    Task: You will create a list of learning resources for the project plan. Don't include links to websites just the names of useful youtube channels, wikipedia pages, and books that will help the team learn the skills they need to complete the project.
     
     Here is the learning plan you will use and add resources to at the bottom: 
 
@@ -53,7 +53,7 @@ def prompt_writing_critic(text):
     
     Role: you are a writing critic. 
 
-    Task: You will rewrite the following text to make it more engaging and informative.:
+    Task: You will rewrite the following text to make it very professional and easy to understand.:
     {text}
 
     I don't want your thoughts, just the revised text in it's entirety with your improvements.

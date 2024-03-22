@@ -5,6 +5,161 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def prompt_test_designer(input_text):
+    """Prompt user for test design details"""
+    prompt = f"""
+    
+    Role: you are a marketing scientist you have expertise in designing a/b tests, brand lift tests, conversion tests, and other marketing experiments.
+
+    Task: You need to describe an experiment and test design you will need to run.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document. You will need to have the following sections: background, opportunity, solution, how test meets our values, primary hypothesis, secondary hypothesis, and KPIs
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Test designer prompt generated")
+    return prompt
+
+
+def prompt_kpis(input_text):
+    """Prompt user for KPI details"""
+    prompt = f"""
+    
+    Role: you are a marketing scientist and lead analyst. 
+
+    Task: You will take the KPIs provided and expand on them also making sure to include counter KPIs
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document. You will need to have the following sections: background, opportunity, solution, how test meets our values, primary hypothesis, secondary hypothesis, and KPIs
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("KPI prompt generated")
+    return prompt
+
+
+def prompt_create_test_plan(input_text):
+    """Prompt user for summary details"""
+    prompt = f"""
+    
+    Role: you are a manager of marketing experimentation and analysis. 
+
+    Task: You will review a proposal for a test plan and rewrite it to make it very professional and easy to understand.
+    You will find any inconsistencies and remove, incorporate, or rewrite them.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document. You will need to have the following sections: background, opportunity, solution, how test meets our values, primary hypothesis, secondary hypothesis, and KPIs
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Marketing plan prompt generated")
+    return prompt
+
+
+def prompt_summary(input_text):
+    """Prompt user for summary details"""
+    prompt = f"""
+    
+    Role: YOu are an excellent summarizer of information. You balance the need for detail with the need for brevity. 
+
+    Task: YOu will expand on the following text and summarize it in a way that is easy to understand and follow.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document.
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Summary prompt generated")
+    return prompt
+
+
+def prompt_values(input_text):
+    """Prompt user for value statement details"""
+    prompt = f"""
+    
+    Role: you are an expert on how to connect tasks with value statements. 
+
+    Context: Our corporate values are community leadership, continuous innovation, and our vision of to facilitate the financial security of its members, associates, and their families through the provision of a full range of highly competitive financial products and services; in so doing, USAA seeks to be the provider of choice for the military community.
+
+    Task: You will read the text I provide you and see how you can connect my goals to the company's values and mission.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document.
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Value statement prompt generated")
+    return prompt
+
+
+def prompt_solution(input_text):
+    """Prompt user for solution details"""
+    prompt = f"""
+    
+    Role: you specialize in drafting solutions to busienss problems. You are given some text and can orgnize, summarize, and expand on the solutions provided.
+
+    Task: Your task will be to prioritize and expand on solutions based on input I give you.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document.
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Solution prompt generated")
+    return prompt
+
+
+def prompt_opportunity(input_text):
+    """Prompt user for opportunity details"""
+    prompt = f"""
+    
+    Role: you are a Marketing scientist and Lead Analyst and you need to write a test plan. 
+
+    Task: You will need to expand and summarize the following opportunity in terms of business impact and context.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document.
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Opportunity prompt generated")
+    return prompt
+
+
+def prompt_background(input_text):
+    """Prompt user for background details"""
+    prompt = f"""
+    
+    Role: you are a Marketing scientist and Lead Analyst and you need to write a test plan. 
+
+    Task: You will take my summary I am going to give and you will rewrite it to make it very professional and easy to understand.
+
+    Here is the input you need to summarize and expand on: {input_text}
+
+    Style: Use Markdown to format the document.
+
+    I don't want your thoughts, just the revised text with your improvements.
+
+    """
+    logger.info("Background prompt generated")
+    return prompt
+
+
 def prompt_learning_resources(plan):
     """Prompt user for learning resources details"""
     prompt = f"""
@@ -51,9 +206,9 @@ def prompt_writing_critic(text):
     """Prompt user for writing critic details"""
     prompt = f"""
     
-    Role: you are a writing critic. 
+    Role: you are a writing critic and expert write of corporate documents and reports.
 
-    Task: You will rewrite the following text to make it very professional and easy to understand.:
+    Task: You will rewrite the following text to make it very professional and easy to understand. You will reorder concepts where they make most sense and remove any inconsistencies. Keep all of the main sections of the document intact:
     {text}
 
     I don't want your thoughts, just the revised text in it's entirety with your improvements.

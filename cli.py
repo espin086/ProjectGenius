@@ -75,7 +75,7 @@ def main_master():
     text_final = gpt.text_generation(prompt_final)
 
     logger.info("Completed Project Plan: %s", args.master)
-    return text_all
+    return text_final
 
 
 if __name__ == "__main__":
@@ -105,6 +105,46 @@ if __name__ == "__main__":
             kpis,
         ) = inputs_test()
         logging.info("SUCCESSFULL INPUT: %s", initiative_name)
+
+        # TODO: create prompts and generate tests
+        prompt_background = prompts.prompt_background(background)
+        text_background = gpt.text_generation(prompt_background)
+
+        prompt_opportunity = prompts.prompt_opportunity(opportunity)
+        text_opportunity = gpt.text_generation(prompt_opportunity)
+
+        prompt_solution = prompts.prompt_test_designer(solution)
+        text_solution = gpt.text_generation(prompt_solution)
+
+        prompt_values = prompts.prompt_values(value_statement)
+        text_values = gpt.text_generation(prompt_values)
+
+        prompt_primary_hypothesis = prompts.prompt_summary(primary_hypothesis)
+        text_primary_hypothesis = gpt.text_generation(prompt_primary_hypothesis)
+
+        prompt_secondary_hypothesis = prompts.prompt_summary(secondary_hypothesis)
+        text_secondary_hypothesis = gpt.text_generation(prompt_secondary_hypothesis)
+
+        prompt_kpis = prompts.prompt_kpis(kpis)
+        text_kpis = gpt.text_generation(prompt_kpis)
+
+        raw_text = (
+            text_background
+            + text_opportunity
+            + text_solution
+            + text_values
+            + text_primary_hypothesis
+            + text_secondary_hypothesis
+            + text_kpis
+        )
+
+        raw_prompt = prompts.prompt_create_test_plan(raw_text)
+        text_raw = gpt.text_generation(raw_prompt)
+
+        print(text_raw)
+
+        # print(text_solution)
+
     elif args.ds:
         print("Updating a project plan...")
     elif args.de:

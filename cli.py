@@ -1,6 +1,7 @@
 import argparse
 import logging
 
+
 # Project Genius Modules
 import prompts
 import gpt
